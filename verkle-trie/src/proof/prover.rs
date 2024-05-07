@@ -56,7 +56,7 @@ pub fn create_verkle_proof<Storage: ReadOnlyHigherDb>(
 //
 // Notes on this abstraction, since a stem always comes with an extension, we can abstract this away
 // An extension always has two openings, so we can also abstract this away (1, stem)
-pub(super) fn create_prover_queries<Storage: ReadOnlyHigherDb>(
+pub fn create_prover_queries<Storage: ReadOnlyHigherDb>(
     storage: &Storage,
     keys: Vec<[u8; 32]>,
 ) -> (Vec<ProverQuery>, VerificationHint) {

@@ -10,8 +10,8 @@ use banderwagon::{trait_defs::*, Element, Fr};
 #[derive(Debug, Clone)]
 // The trie implements the logic to insert values, fetch values, and create paths to said values
 pub struct Trie<Storage, PolyCommit: Committer> {
-    pub(crate) storage: Storage,
-    committer: PolyCommit,
+    pub storage: Storage,
+    pub committer: PolyCommit,
 }
 
 // Implementation of the trie trait that should be considered the public API for the trie
@@ -64,7 +64,7 @@ pub(crate) type BranchId = Vec<u8>;
 // we can "read and prepare" all of the necessary updates, which
 // works well with Rust's somewhat limited borrow checker (pre-polonius).
 #[derive(Debug)]
-enum Ins {
+pub enum Ins {
     // This Opcode modifies the leaf, stem and inner node all at once!
     // We know that whenever a leaf is modified, the stem metadata is also modified,
     // and the inner node which references the stem's metadata is also modified
@@ -154,7 +154,11 @@ impl<Storage: ReadWriteHigherDb, PolyCommit: Committer> Trie<Storage, PolyCommit
     // Then, we need to store the leaf in the key-value database
     // and possibly the cached layer depending on the depth of the
     // leaf in the trie. The first 3/4 layers are stored in the cache
-    fn create_insert_instructions(&self, key_bytes: [u8; 32], value_bytes: [u8; 32]) -> Vec<Ins> {
+    pub fn create_insert_instructions(
+        &self,
+        key_bytes: [u8; 32],
+        value_bytes: [u8; 32],
+    ) -> Vec<Ins> {
         let mut instructions = Vec::new();
 
         let path_indices = key_bytes.into_iter();
@@ -294,7 +298,7 @@ impl<Storage: ReadWriteHigherDb, PolyCommit: Committer> Trie<Storage, PolyCommit
         instructions
     }
     // Process instructions in reverse order
-    fn process_instructions(&mut self, instructions: Vec<Ins>) {
+    pub fn process_instructions(&mut self, instructions: Vec<Ins>) {
         for ins in instructions.into_iter().rev() {
             match ins {
                 Ins::InternalNodeFallThrough {
@@ -749,7 +753,7 @@ fn path_difference(key_a: [u8; 31], key_b: [u8; 31]) -> (Vec<u8>, Option<u8>, Op
 // [0,1,2,5], [0,1,2,5,6], [0,1,2,5,6,7]
 // TODO: Is this hurting performance? If so can we rewrite it to be more efficient?
 // TODO Eagerly, we can use SmallVec32
-fn paths_from_relative(parent_path: Vec<u8>, relative_paths: Vec<u8>) -> Vec<Vec<u8>> {
+pub fn paths_from_relative(parent_path: Vec<u8>, relative_paths: Vec<u8>) -> Vec<Vec<u8>> {
     assert!(!relative_paths.is_empty());
 
     let mut result = vec![parent_path; relative_paths.len()];

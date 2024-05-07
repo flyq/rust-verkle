@@ -32,7 +32,7 @@ pub trait TrieTrait {
     }
 
     /// Gets the value at the `Key` if it exists
-    /// Returns an error if it does not exist
+    /// Returns an none if it does not exist
     /// TODO: Find out if this method is ever needed
     fn get(&self, key: Key) -> Option<Value>;
 
@@ -50,7 +50,7 @@ pub trait TrieTrait {
 }
 
 // TODO: remove this, its here for backwards compatibility
-pub(crate) fn group_to_field(point: &Element) -> Fr {
+pub fn group_to_field(point: &Element) -> Fr {
     point.map_to_scalar_field()
 }
 

@@ -11,9 +11,9 @@ use std::io::{Read, Write};
 
 mod key_path_finder;
 mod opening_data;
-pub(crate) mod prover;
+pub mod prover;
 pub mod stateless_updater;
-pub(crate) mod verifier;
+pub mod verifier;
 
 // Every stem node has an associated extension node
 // This extension node commits to all of the data in a stem
