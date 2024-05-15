@@ -14,7 +14,7 @@ use ipa_multipoint::crs::CRS;
 use ipa_multipoint::lagrange_basis::PrecomputedWeights;
 use ipa_multipoint::multiproof::{MultiPoint, MultiPointProof, ProverQuery, VerifierQuery};
 use ipa_multipoint::transcript::Transcript;
-use serialization::{fr_from_le_bytes, fr_to_le_bytes};
+pub use serialization::{fr_from_le_bytes, fr_to_le_bytes};
 
 use crate::serialization::{deserialize_proof_query, deserialize_verifier_query};
 
