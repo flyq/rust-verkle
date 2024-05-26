@@ -122,6 +122,7 @@ impl PrecomputedWeights {
         self.barycentric_weights[i + (self.barycentric_weights.len() / 2)]
     }
     // A'(x_j) where x_j = domain_element
+    // A'(x_j) = (x_j - 0)(x_j - 1)...(x_j - (domain_size - 1)) without x_j - x_j
     pub fn compute_barycentric_weight_for(domain_element: usize, domain_size: usize) -> Fr {
         let domain_element_fr = Fr::from(domain_element as u128);
 
@@ -216,8 +217,7 @@ impl LagrangeBasis {
             .collect();
 
         let a_z: Fr = (0..domain_size)
-            .map(|i| Fr::from(i as u128))
-            .map(|element| point - element)
+            .map(|i| point - Fr::from(i as u128))
             .product();
         batch_inversion_and_mul(&mut lagrange_evaluations, &a_z);
 

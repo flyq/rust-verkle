@@ -79,6 +79,7 @@ impl MultiPoint {
         // aggregate all of the queries evaluated at the same point
         let aggregated_queries: Vec<_> = grouped_queries
             .into_iter()
+            // 对于都在 point 处打开的几个多项式，聚合它们！
             .map(|(point, queries_challenges)| {
                 let mut aggregated_polynomial = vec![Fr::zero(); crs.n];
 
