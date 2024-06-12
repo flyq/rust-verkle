@@ -299,11 +299,33 @@ mod test {
     }
     #[test]
     fn proof_of_absence_edge_case() {
+        use banderwagon::Zero;
+        let db = MemoryDb::new();
+        let trie = Trie::new(DefaultConfig::new(db));
+
+        // let trie.inser
+        let absent_keys = vec![[3; 32]];
+        let absent_values = vec![None];
+
+        println!("{:?}", absent_values);
+        let root = vec![];
+        let meta = trie.storage.get_branch_meta(&root).unwrap();
+
+        assert_eq!(meta.hash_commitment, Fr::zero());
+
+        let proof = prover::create_verkle_proof(&trie.storage, absent_keys.clone()).unwrap();
+
+        let (ok, _) = proof.check(absent_keys, absent_values, meta.commitment);
+        assert!(ok);
+    }
+
+    #[test]
+    fn proof_of_absence_edge_case2() {
         let db = MemoryDb::new();
         let trie = Trie::new(DefaultConfig::new(db));
 
         let absent_keys = vec![[3; 32]];
-        let absent_values = vec![None];
+        let absent_values = vec![Some([0; 32])];
 
         let root = vec![];
         let meta = trie.storage.get_branch_meta(&root).unwrap();
@@ -311,7 +333,7 @@ mod test {
         let proof = prover::create_verkle_proof(&trie.storage, absent_keys.clone()).unwrap();
 
         let (ok, _) = proof.check(absent_keys, absent_values, meta.commitment);
-        assert!(ok);
+        assert_eq!(ok, false);
     }
 
     #[test]
