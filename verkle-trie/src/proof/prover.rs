@@ -20,7 +20,8 @@ pub fn create_verkle_proof<Storage: ReadOnlyHigherDb>(
         return Err(ProofCreationError::EmptyKeySet);
     }
     let (queries, verification_hint) = create_prover_queries(storage, keys);
-
+    // println!("queries' len: {}, value: {:?}", queries.len(), queries);
+    // println!("verification_hint: {:?}", verification_hint);
     // Commitments without duplicates and without the root, (implicitly) sorted by path, since the queries were
     // processed by path order
     let root_query = match queries.first() {
